@@ -1,0 +1,11 @@
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+*.db
+.git
+.env
+# Frontend source deps / build are produced in the Docker build stage.
+frontend/node_modules
+frontend/dist

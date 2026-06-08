@@ -1,0 +1,38 @@
+# Web framework (JSON API; the dashboard is a React SPA in frontend/)
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+gunicorn==23.0.0
+itsdangerous==2.2.0  # required by Starlette SessionMiddleware
+python-multipart==0.0.20  # required by FastAPI for file uploads (UploadFile)
+
+# Database
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3
+
+# Config & validation
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Security
+cryptography==44.0.0
+bcrypt==4.2.1
+
+# HTTP client (platform APIs)
+httpx==0.28.1
+
+# Media storage (S3 / S3-compatible). Local-disk fallback needs no extra deps.
+boto3==1.35.99
+
+# Scheduler
+apscheduler==3.11.0
+
+# AI providers
+anthropic==0.42.0
+openai==1.59.6
+google-genai==0.3.0
+
+# Dev / test
+pytest==8.3.4
+pytest-asyncio==0.25.2
+respx==0.22.0

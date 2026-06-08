@@ -1,0 +1,56 @@
+# Local / VPS stack: Postgres + web app + scheduler worker.
+# The web and worker share the same image and DB but run as separate processes.
+
+# Shared Postgres URL injected into every service that talks to the DB.
+x-database-url: &db_url "postgresql+psycopg://smap:smap@db:5432/smap"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: smap
+      POSTGRES_PASSWORD: smap
+      POSTGRES_DB: smap
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smap"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    build: .
+    command: alembic upgrade head
+    env_file: .env
+    environment:
+      DATABASE_URL: *db_url
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: *db_url
+    ports:
+      - "8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build: .
+    command: python -m app.scheduler.worker
+    env_file: .env
+    environment:
+      DATABASE_URL: *db_url
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
