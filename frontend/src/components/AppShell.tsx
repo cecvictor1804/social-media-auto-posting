@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { Calendar, LayoutList, LogOut, Megaphone, Menu, Moon, PenSquare, Plug, Sun, X } from "lucide-react";
+import { Calendar, LayoutList, LogOut, Megaphone, Menu, Moon, PenSquare, Plug, Sun, Users, X } from "lucide-react";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { qk } from "@/lib/queryKeys";
+import type { User } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 
-const NAV = [
+const BASE_NAV = [
   { to: "/", label: "Compose", Icon: PenSquare, end: true },
   { to: "/queue", label: "Queue", Icon: LayoutList, end: false },
   { to: "/calendar", label: "Calendar", Icon: Calendar, end: false },
   { to: "/accounts", label: "Accounts", Icon: Plug, end: false },
 ];
+const ADMIN_NAV = [{ to: "/users", label: "Users", Icon: Users, end: false }];
 
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
@@ -23,10 +26,10 @@ function ThemeToggle() {
   );
 }
 
-function NavItems({ onNavigate }: { onNavigate?: () => void }) {
+function NavItems({ items, onNavigate }: { items: typeof BASE_NAV; onNavigate?: () => void }) {
   return (
     <>
-      {NAV.map(({ to, label, Icon, end }) => (
+      {items.map(({ to, label, Icon, end }) => (
         <NavLink
           key={to}
           to={to}
@@ -66,6 +69,8 @@ function Brand() {
 export function AppShell() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const me = qc.getQueryData<User>(qk.me);
+  const navItems = me?.is_admin ? [...BASE_NAV, ...ADMIN_NAV] : BASE_NAV;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   async function logout() {
@@ -82,7 +87,7 @@ export function AppShell() {
           <Brand />
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3">
-          <NavItems />
+          <NavItems items={navItems} />
         </nav>
         <div className="flex items-center justify-between border-t px-3 py-3">
           <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={logout}>
@@ -115,7 +120,7 @@ export function AppShell() {
               </Button>
             </div>
             <nav className="flex flex-col gap-1">
-              <NavItems onNavigate={() => setMobileOpen(false)} />
+              <NavItems items={navItems} onNavigate={() => setMobileOpen(false)} />
             </nav>
             <Button variant="ghost" size="sm" className="mt-4 text-muted-foreground" onClick={logout}>
               <LogOut className="h-4 w-4" /> Logout

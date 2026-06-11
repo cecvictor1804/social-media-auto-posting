@@ -7,6 +7,7 @@ import Queue from "@/pages/Queue";
 import CalendarPage from "@/pages/Calendar";
 import Accounts from "@/pages/Accounts";
 import Review from "@/pages/Review";
+import UsersPage from "@/pages/Users";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/accounts" element={<Accounts />} />
         <Route path="/posts/:id" element={<Review />} />
+        <Route path="/users" element={<UsersPage />} />
       </Route>
     </Routes>
   );

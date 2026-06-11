@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import MediaAsset, Platform, Post, PostTarget, SocialAccount
+from app.models import MediaAsset, Platform, Post, PostTarget, SocialAccount, User
 from app.publishers.base import PLATFORM_CHAR_LIMITS
 from app.timeutil import utc_to_local_str
 
@@ -38,6 +38,36 @@ class LoginIn(BaseModel):
 class UserOut(BaseModel):
     id: int
     email: str
+    is_admin: bool
+
+
+class UserAdminOut(BaseModel):
+    id: int
+    email: str
+    is_admin: bool
+    is_active: bool
+    created_at: str | None
+
+    @classmethod
+    def from_orm_user(cls, u: User) -> "UserAdminOut":
+        return cls(
+            id=u.id,
+            email=u.email,
+            is_admin=u.is_admin,
+            is_active=u.is_active,
+            created_at=_iso(u.created_at),
+        )
+
+
+class CreateUserIn(BaseModel):
+    email: str
+    password: str
+    is_admin: bool = False
+
+
+class UpdateUserIn(BaseModel):
+    is_admin: bool | None = None
+    is_active: bool | None = None
 
 
 # ── Compose metadata ─────────────────────────────────────────────────────────

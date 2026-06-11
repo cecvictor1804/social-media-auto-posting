@@ -20,6 +20,7 @@ def ensure_admin(session: Session) -> None:
             User(
                 email=settings.admin_email,
                 password_hash=hash_password(settings.admin_password),
+                is_admin=True,
             )
         )
         session.commit()
@@ -45,4 +46,14 @@ def current_user(request: Request, session: Session = Depends(get_session)) -> U
     if user is None or not user.is_active:
         request.session.clear()
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    return user
+
+
+def require_admin(user: User = Depends(current_user)) -> User:
+    """Dependency: authenticated + is_admin, else 403."""
+    if not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
     return user

@@ -26,6 +26,15 @@ export interface ManualAccountForm {
 export interface User {
   id: number;
   email: string;
+  is_admin: boolean;
+}
+
+export interface AdminUser {
+  id: number;
+  email: string;
+  is_admin: boolean;
+  is_active: boolean;
+  created_at: string | null;
 }
 
 export interface ModelInfo {

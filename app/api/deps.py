@@ -12,9 +12,10 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from app.auth import current_user
+from app.auth import current_user, require_admin
 from app.db import get_session
 from app.models import User
 
 CurrentUser = Annotated[User, Depends(current_user)]
+RequireAdmin = Annotated[User, Depends(require_admin)]
 DBSession = Annotated[Session, Depends(get_session)]

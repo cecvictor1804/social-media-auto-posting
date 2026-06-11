@@ -9,6 +9,7 @@ export const qk = {
   posts: ["posts"] as const,
   post: (id: string | number) => ["post", String(id)] as const,
   calendar: ["calendar"] as const,
+  users: ["users"] as const,
 };
 
 /** Invalidate everything that a post mutation can affect (queue + calendar). */

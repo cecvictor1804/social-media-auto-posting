@@ -72,6 +72,8 @@ export const api = {
   get: <T>(path: string, opts?: Options) => request<T>(path, { ...opts, method: "GET" }),
   post: <T>(path: string, body?: unknown, opts?: Options) =>
     request<T>(path, { ...opts, method: "POST", body }),
+  patch: <T>(path: string, body?: unknown, opts?: Options) =>
+    request<T>(path, { ...opts, method: "PATCH", body }),
   del: <T>(path: string, opts?: Options) => request<T>(path, { ...opts, method: "DELETE" }),
   upload: uploadFile,
 };
