@@ -19,7 +19,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.api import accounts, auth, drafts, media, oauth, posts, users
+from app.api import accounts, auth, drafts, media, oauth, posts, token, users
 from app.auth import ensure_admin
 from app.config import settings
 from app.db import SessionLocal
@@ -50,7 +50,7 @@ def _startup() -> None:
 
 
 # JSON API (/api) + OAuth browser-redirect routes.
-for _router in (auth.router, drafts.router, posts.router, media.router, accounts.router, oauth.router, users.router):
+for _router in (auth.router, token.router, drafts.router, posts.router, media.router, accounts.router, oauth.router, users.router):
     app.include_router(_router)
 
 

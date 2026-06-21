@@ -17,6 +17,7 @@ pydantic-settings==2.7.1
 # Security
 cryptography==44.0.0
 bcrypt==4.2.1
+python-jose[cryptography]==3.3.0
 
 # HTTP client (platform APIs)
 httpx==0.28.1

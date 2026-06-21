@@ -57,6 +57,10 @@ class Settings(BaseSettings):
     linkedin_api_version: str = "202505"
     linkedin_scopes: str = "w_member_social,r_liteprofile"
 
+    # JWT (mobile / Bearer-token auth)
+    jwt_algorithm: str = "HS256"
+    jwt_expire_days: int = 30
+
     # Scheduler
     scheduler_poll_seconds: int = 60
     max_publish_attempts: int = 5
